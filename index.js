@@ -20,11 +20,21 @@ const sensorData = [];
 const { Console } = require('console');
 
 app.use(express.json());
+
+// Add headers before the routes are defined
+app.use(function (req, res, next) {
+	res.setHeader('Access-Control-Allow-Origin', '*');
+	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type,Authorization');
+	res.setHeader('Access-Control-Allow-Credentials', true);
+	next();
+});
+
 app.use(cors({
-	origin: ["http://localhost:8888", "http://127.0.0.1:8888", "app://*", "app://.", "file://*"],
-	methods: ["GET", "POST", "OPTIONS"],
-	credentials: true,
-	allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+	origin: '*',
+	methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+	allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization'],
+	credentials: true
 }));
 
 const server = http.Server(app);
@@ -32,10 +42,19 @@ server.listen(4000, () => console.log('Listening on port 4000'));
 
 const io = socketIO(server, {
 	cors: {
-		origin: ["http://localhost:8888", "http://127.0.0.1:8888", "app://*", "app://.", "file://*"],
-		methods: ["GET", "POST", "OPTIONS"],
-		credentials: true,
-		allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"]
+		origin: '*',
+		methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
+		allowedHeaders: ['X-Requested-With', 'content-type', 'Authorization'],
+		credentials: true
+	},
+	handlePreflightRequest: (req, res) => {
+		res.writeHead(200, {
+			'Access-Control-Allow-Origin': '*',
+			'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+			'Access-Control-Allow-Headers': 'X-Requested-With,content-type,Authorization',
+			'Access-Control-Allow-Credentials': true
+		});
+		res.end();
 	}
 });
 
