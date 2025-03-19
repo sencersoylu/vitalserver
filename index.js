@@ -29,7 +29,7 @@ const io = socketIO(server);
 // SerialPort configuration
 const serialPortConfig = {
 	path: process.env.SERIAL_PORT_PATH || '/dev/ttyUSB0',
-	baudRate: parseInt(process.env.SERIAL_BAUD_RATE) || 9600,
+	baudRate: parseInt(process.env.SERIAL_BAUD_RATE) || 57600,
 	autoOpen: false
 };
 
