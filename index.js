@@ -20,22 +20,12 @@ const sensorData = [];
 const { Console } = require('console');
 
 app.use(express.json());
-app.use(cors({
-	origin: ["http://localhost:8888", "http://127.0.0.1:8888"],
-	methods: ["GET", "POST"],
-	credentials: true
-}));
+app.use(cors());
 
 const server = http.Server(app);
 server.listen(4000, () => console.log('Listening on port 4000'));
 
-const io = socketIO(server, {
-	cors: {
-		origin: ["http://localhost:8888", "http://127.0.0.1:8888"],
-		methods: ["GET", "POST"],
-		credentials: true
-	}
-});
+const io = socketIO(server);
 
 // SerialPort configuration
 const serialPortConfig = {
