@@ -83,7 +83,7 @@ io.on('connection', (socket) => {
 	socket.on('serialSend', (data) => {
 		console.log('Sending to serial port:', data);
 		if (serialport.isOpen) {
-			serialport.write(data.message + '\n', (err) => {
+			serialport.write(data.message , (err) => {
 				if (err) {
 					console.error('Error writing to serial port:', err.message);
 					socket.emit('serialError', { error: err.message });
