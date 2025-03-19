@@ -82,14 +82,19 @@ io.on('connection', (socket) => {
 	// Serial port events
 	socket.on('serialSend', (data) => {
 		console.log('Sending to serial port:', data);
+		if (!data || typeof data !== 'string') {
+			socket.emit('serialError', { error: 'Invalid data format. Expected a string.' });
+			return;
+		}
+
 		if (serialport.isOpen) {
-			serialport.write(data.message , (err) => {
+			serialport.write(data + '\r\n', (err) => {
 				if (err) {
 					console.error('Error writing to serial port:', err.message);
 					socket.emit('serialError', { error: err.message });
 				} else {
-					console.log('Message sent to serial port');
-					socket.emit('serialSent', { success: true });
+					console.log('Message sent to serial port:', data);
+					socket.emit('serialSent', { success: true, message: data });
 				}
 			});
 		} else {
