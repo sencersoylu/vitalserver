@@ -41,6 +41,7 @@ const server = http.Server(app);
 server.listen(4000, () => console.log('Listening on port 4000'));
 
 const io = socketIO(server, {
+	allowEIO3: true,
 	cors: {
 		origin: '*',
 		methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'PATCH', 'DELETE'],
